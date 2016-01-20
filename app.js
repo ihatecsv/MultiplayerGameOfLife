@@ -10,11 +10,11 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var chalk = require('chalk');
 
-function zero2D(rows, cols){
-  var array = [], row = [];
-  while (cols--) row.push(0);
-  while (rows--) array.push(row.slice());
-  return array;
+function zero2D(rows, cols){  //Thanks http://stackoverflow.com/users/375394/moogoo
+	var array = [], row = [];
+	while (cols--) row.push(0);
+	while (rows--) array.push(row.slice());
+	return array;
 }
 
 var grid = zero2D(200,200);
