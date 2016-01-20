@@ -1,7 +1,7 @@
 /*
 Conway's Game of Life
 Clone by Drake Luce
-https://github.com/ihatecsv
+https://github.com/ihatecsv/GameOfLifeClone/
 Server
 */
 
