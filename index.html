@@ -16,7 +16,7 @@ Client
 	</style>
   </head>
   <body oncontextmenu="return false;">
-	<h2><i>Conway's Game of Life</i> - NodeJS and Canvas - made by <a href="https://github.com/ihatecsv/MultiplayerGameOfLife">Drake Luce</a></h2>
+	<h2><i>Conway's Game of Life</i> - NodeJS and Canvas - <a href="https://github.com/ihatecsv/MultiplayerGameOfLife">GitHub source</a></h2>
 	<canvas id="myCanvas" width="800" height="800" style="border-style: solid;"></canvas>
 	<br>
 	<button type="button" id="push">Push drawn cells (UP)</button>
@@ -33,7 +33,7 @@ Client
 	var canvas = document.getElementById("myCanvas");
 	var ctx = canvas.getContext("2d");
 	var heat = simpleheat(canvas); //Thanks https://github.com/mourner/simpleheat
-	heat.max(80);
+	heat.max(121);
 	
 	var colored = 0;
 	
