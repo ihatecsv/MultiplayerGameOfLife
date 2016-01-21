@@ -1,4 +1,4 @@
-# GameOfLifeClone
+# MultiplayerGameOfLife
 A clone of Conway's Game of Life in NodeJS and HTML5
 
 ### Usage
