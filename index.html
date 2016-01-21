@@ -39,6 +39,8 @@ Client
 	
 	var gridded = true;
 	
+	ctx.font = "20px Verdana";
+	
 	function zero2D(rows, cols){ //Thanks http://stackoverflow.com/users/375394/moogoo
 		var array = [], row = [];
 		while (cols--) row.push(0);
@@ -88,28 +90,47 @@ Client
 					}
 				}
 				if(grid[i][j] == 1){
-					if(colored == 0){
-						ctx.fillStyle = "#000000";
-						ctx.fillRect(i*4,j*4,4,4);
-					}else if(colored == 1){
-						if(i > j){
-							ctx.fillStyle = gradColorArray[i];
-						}else{
-							ctx.fillStyle = gradColorArray[j];
-						}
-						ctx.fillRect(i*4,j*4,4,4);
-					}else if(colored == 2){
-						ctx.fillStyle = '#'+Math.floor(Math.random()*16777215).toString(16);
-						ctx.fillRect(i*4,j*4,4,4);
-					}else if(colored == 3){
-						var count = countNeighbours(i, j, 1, grid);
-						heat.add([i*4, j*4, count]);
+					switch(colored){
+						case 0:
+							ctx.fillStyle = "#000000";
+							ctx.fillRect(i*4,j*4,4,4);
+							break;
+						case 1:
+							if(i > j){
+								ctx.fillStyle = gradColorArray[i];
+							}else{
+								ctx.fillStyle = gradColorArray[j];
+							}
+							ctx.fillRect(i*4,j*4,4,4);
+							break;
+						case 2:
+							ctx.fillStyle = '#'+Math.floor(Math.random()*16777215).toString(16);
+							ctx.fillRect(i*4,j*4,4,4);
+							break;
+						case 3:
+							var count = countNeighbours(i, j, 1, grid);
+							heat.add([i*4, j*4, count]);
+							break;
 					}
 				}
 			}
 		}
-		if(colored == 3){
-			heat.draw();
+		ctx.fillStyle = "#000000";
+		switch(colored){
+			case 0:
+				ctx.fillText("Normal",0,800);
+				break;
+			case 1:
+				ctx.fillText("Gradient",0,800);
+				break;
+			case 2:
+				ctx.fillText("Random",0,800);
+				break;
+			case 3:
+				heat.draw();
+				ctx.globalAlpha = 1;
+				ctx.fillText("Heat",0,800);
+				break;
 		}
 		drawClientGrid("#0000FF");
 	});
