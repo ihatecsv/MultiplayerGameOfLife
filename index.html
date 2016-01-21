@@ -45,25 +45,13 @@ Client
 	
 	var clientGrid = zero2D(200,200);
 	
-	function relMouseCoords(event){ //thanks Ryan Artecona
-		var totalOffsetX = 0;
-		var totalOffsetY = 0;
-		var canvasX = 0;
-		var canvasY = 0;
-		var currentElement = this;
-
-		do{
-			totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
-			totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
-		}
-		while(currentElement = currentElement.offsetParent)
-
-		canvasX = event.pageX - totalOffsetX;
-		canvasY = event.pageY - totalOffsetY;
-
-		return {x:canvasX, y:canvasY}
-		}
-	HTMLCanvasElement.prototype.relMouseCoords = relMouseCoords;
+	function getMousePos(canvas, evt) { //Thanks http://stackoverflow.com/users/1693593/k3n
+		var rect = canvas.getBoundingClientRect();
+		return {
+		  x: evt.clientX - rect.left,
+		  y: evt.clientY - rect.top
+		};
+	}
 	
 	var colorArray = ['#ff0000', '#fe0004', '#fd000b', '#fd000b', '#fc0012', '#fd0012', '#fc0017', '#fb001a', '#fb001b', '#fa001f', '#f9001f', '#f80023', '#f80023', '#f70026', '#f70028', '#f7002a', '#f6002d', '#f6002d', '#f50030', '#f40030', '#f30033', '#f30033', '#f20035', '#f20038', '#f10038', '#f0003b', '#f0003d', '#f0003d', '#ef0040', '#ef0040', '#ed0042', '#ec0045', '#ed0045', '#ec0047', '#ea004a', '#ea004a', '#ea004c', '#ea004c', '#e9004e', '#e70051', '#e70053', '#e70053', '#e60055', '#e60055', '#e40057', '#e40059', '#e40059', '#e3005b', '#e2005d', '#e1005d', '#e1005f', '#e00061', '#df0061', '#df0063', '#de0064', '#de0065', '#dd0067', '#dc0069', '#db006b', '#da006b', '#da006d', '#d9006e', '#d9006f', '#d80071', '#d70071', '#d60074', '#d50074', '#d40076', '#d40077', '#d30078', '#d2007a', '#d2007b', '#d1007c', '#d0007d', '#cf007f', '#cf0080', '#ce0081', '#cd0082', '#cc0084', '#cb0085', '#ca0087', '#ca0088', '#c90089', '#c9008a', '#c7008c', '#c7008c', '#c6008d', '#c5008f', '#c50090', '#c40090', '#c30092', '#c20094', '#c10095', '#c00096', '#c00097', '#bf0099', '#be0099', '#bd009c', '#bb009d', '#bb009e', '#bb009e', '#ba00a0', '#b800a1', '#b800a1', '#b700a2', '#b600a4', '#b500a6', '#b300a7', '#b300a8', '#b200a8', '#b100aa', '#b000ab', '#af00ac', '#af00ad', '#ae00ad', '#ad00b0', '#ab00b1', '#ab00b2', '#a900b3', '#a900b3', '#a800b4', '#a700b5', '#a500b7', '#a400b8', '#a400b9', '#a300ba', '#a100bc', '#a000be', '#a000be', '#9f00bf', '#9d00bf', '#9c00c1', '#9b00c2', '#9900c3', '#9800c4', '#9800c5', '#9600c6', '#9500c8', '#9400c8', '#9400c9', '#9200ca', '#9100cb', '#8f00cc', '#8e00cd', '#8e00ce', '#8c00cf', '#8a00d0', '#8a00d0', '#8900d2', '#8700d3', '#8600d4', '#8500d5', '#8200d6', '#8200d7', '#8000d8', '#7f00d9', '#7e00d9', '#7c00db', '#7a00dc', '#7800dd', '#7800dd', '#7500df', '#7500df', '#7200e1', '#7200e1', '#7000e2', '#6e00e3', '#6c00e5', '#6b00e5', '#6a00e6', '#6800e6', '#6600e7', '#6400e9', '#6300e9', '#6000ea', '#5f00eb', '#5c00ec', '#5a00ed', '#5800ee', '#5500ef', '#5400f0', '#5200f0', '#4f00f1', '#4e00f2', '#4c00f2', '#4800f4', '#4700f4', '#4300f5', '#3e00f7', '#3c00f7', '#3c00f7', '#3500f9', '#3100fa', '#2f00fa', '#2a00fb', '#2400fc', '#1e00fd', '#1500fe', '#1000fe', '#0000ff'];
 	
@@ -117,7 +105,7 @@ Client
 	
 	var isDragging = false;
 	function pushPos(event){
-		coords = canvas.relMouseCoords(event);
+		coords = getMousePos(canvas, event);
 		canvasX = coords.x;
 		canvasY = coords.y;
 		
