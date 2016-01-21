@@ -5,7 +5,8 @@ https://github.com/ihatecsv/MultiplayerGameOfLife
 Server
 */
 
-var app = require('express')();
+var express = require('express');
+var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var chalk = require('chalk');
@@ -25,6 +26,8 @@ var tickSpeed = 300;
 app.get('/', function(req, res){
 	res.sendFile(__dirname + '/index.html');
 });
+
+app.use(express.static('public'));
 
 function countNeighbours(x, y, type){
 	count = 0;
