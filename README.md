@@ -8,8 +8,5 @@ A clone of Conway's Game of Life in NodeJS and HTML5
 4. Run `node app.js`
 5. Connect to `http://your-ip:3000/`
 
-### Live demo
-[Live demo](http://laxatus.com:3000/ "Live demo")
-
 ### Screenshot
 ![Screenshot](http://i.imgur.com/YI4uOEy.png)
