@@ -104,4 +104,4 @@ setInterval(function(){
 	grid = otherGrid;
 	otherGrid = zero2D(200,200);
 	io.emit('grid', grid);
-}, 300);
+}, tickSpeed);
