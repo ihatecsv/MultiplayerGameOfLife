@@ -17,8 +17,11 @@ Client
   </head>
   <body oncontextmenu="return false;">
 	<h2><i>Conway's Game of Life</i> - NodeJS and Canvas - <a href="https://github.com/ihatecsv/MultiplayerGameOfLife">GitHub source</a></h2>
-	<canvas id="myCanvas" width="800" height="800" style="border-style: solid;"></canvas>
-	<br>
+  <div style='height:800px;margin:0 auto;width:800px;'>
+    <canvas id="myGrid" width="800" height="800" style="border-style:solid;display:none;left:560px;position:absolute;top:87px;z-index:20;"></canvas>
+    <canvas id="myCanvas" width="800" height="800" style="border-style:solid;left:560px;position:absolute;top:87px;z-index:25;"></canvas>
+  </div>
+  <br>
 	<button type="button" id="push">Push drawn cells (UP)</button>
 	<button type="button" id="cleardraw">Clear drawn cells (DOWN)</button>
 	<button type="button" id="clearsim">Clear sim cells (ESC)</button>
@@ -32,7 +35,9 @@ Client
   var gridSize = [200,200];
 	var socket = io();
 	var canvas = document.getElementById("myCanvas");
+	var gridCanvas = document.getElementById("myGrid");
 	var ctx = canvas.getContext("2d");
+  var gCtx = gridCanvas.getContext("2d");
 	var heat = simpleheat(canvas); //Thanks https://github.com/mourner/simpleheat
 	heat.max(121);
 
@@ -84,14 +89,6 @@ Client
 		ctx.globalAlpha = 1;
 		for(var i = 0; i < grid.length; i++){
 			for(var j = 0; j < grid[0].length; j++){
-				if(gridded){
-		      /* In order to give it a more gridded look i change the color of each two cell to each cell.*/
-						ctx.fillStyle = "#D3D3D3";
-						ctx.fillRect(i*4,j*4,4,4);
-            // Added to give a more Gridded look.
-  					ctx.fillStyle = "#FFF";
-						ctx.fillRect(i*4,j*4,3,3);
-				}
 				if(grid[i][j] == 1){
 					switch(colored){
 						case 0:
@@ -226,7 +223,7 @@ Client
 		}
 
 		if(e.keyCode == 71){
-			gridded = !gridded;
+			toggleGrid();
 		}
 	});
 
@@ -258,8 +255,33 @@ Client
 	});
 
 	$('#tgrid').click(function(e){
-		gridded = !gridded;
+		toggleGrid();
 	});
+
+  function initGrid(){
+    gCtx.clearRect(0, 0, gridCanvas.width, gridCanvas.height);
+    gCtx.globalAlpha = 1;
+    for(var i = 0; i < gridSize[0];  i++){
+      for(var j = 0; j < gridSize[1]; j++){
+          /* In order to give it a more gridded look i change the color of each two cell to each cell.*/
+            gCtx.fillStyle = "#D3D3D3";
+            gCtx.fillRect(i*4,j*4,4,4);
+            // Added to give a more Gridded look.
+            gCtx.fillStyle = "#FFF";
+            gCtx.fillRect(i*4,j*4,3,3);
+      }
+    }
+  }
+
+  function toggleGrid(){
+    var myGrid = document.getElementById('myGrid');
+    var disGrid = 'none';
+    if(myGrid.style.display == 'none')
+      disGrid = 'block';
+    document.getElementById('myGrid').style.display = disGrid;
+  }
+  initGrid();
+
 	</script>
   </body>
 </html>
