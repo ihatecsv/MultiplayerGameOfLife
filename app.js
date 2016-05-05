@@ -30,7 +30,7 @@ app.get('/', function(req, res){
 app.use(express.static('public'));
 
 function countNeighbours(x, y, type){
-	count = 0;
+	var count = 0;
 	for(var i = -1; i <= 1; i++){
 		for(var j = -1; j <= 1; j++){
 			if(x+i >= 0 && x+i < 200 && y+j >= 0 && y+j < 200){
@@ -48,11 +48,11 @@ function countNeighbours(x, y, type){
 io.on('connection', function(socket){
 	var d = new Date();
 	console.log(chalk.green('User connected with ' + socket.request.connection.remoteAddress) + " at " + d.toUTCString());
-	
+
 	io.emit('grid', grid);
-	
+
 	io.emit('tickSpeed', tickSpeed);
-	
+
 	socket.on('clientGrid', function(clientGrid){
 		for(var i = 0; i < clientGrid.length; i++){
 			for(var j = 0; j < clientGrid.length; j++){
@@ -64,14 +64,14 @@ io.on('connection', function(socket){
 		var d = new Date();
 		console.log(chalk.blue('Creation pushed by ' + socket.request.connection.remoteAddress) + " at " + d.toUTCString());
 	});
-	
+
 	socket.on('clear', function(e){
 		grid = zero2D(200,200);
 		io.emit('grid', grid);
 		var d = new Date();
 		console.log(chalk.yellow('Board cleared by ' + socket.request.connection.remoteAddress) + " at " + d.toUTCString());
 	});
-	
+
 	socket.on('disconnect', function (e){
 		var d = new Date();
 		console.log(chalk.red('User disconnected: ' + socket.request.connection.remoteAddress) + " at " + d.toUTCString());

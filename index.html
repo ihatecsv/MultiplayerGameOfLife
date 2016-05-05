@@ -34,22 +34,22 @@ Client
 	var ctx = canvas.getContext("2d");
 	var heat = simpleheat(canvas); //Thanks https://github.com/mourner/simpleheat
 	heat.max(121);
-	
+
 	var colored = 0;
-	
-	var gridded = false;
-	
+
+	var gridded = true;
+
 	ctx.font = "20px Verdana";
-	
+
 	function zero2D(rows, cols){ //Thanks http://stackoverflow.com/users/375394/moogoo
 		var array = [], row = [];
 		while (cols--) row.push(0);
 		while (rows--) array.push(row.slice());
 		return array;
 	}
-	
+
 	var clientGrid = zero2D(200,200);
-	
+
 	function getMousePos(canvas, evt) { //Thanks http://stackoverflow.com/users/1693593/k3n
 		var rect = canvas.getBoundingClientRect();
 		return {
@@ -57,7 +57,7 @@ Client
 		  y: evt.clientY - rect.top
 		};
 	}
-	
+
 	function countNeighbours(x, y, type, grid){
 		count = 0;
 		for(var i = -5; i <= 5; i++){
@@ -73,9 +73,9 @@ Client
 		}
 		return count;
 	}
-	
+
 	var gradColorArray = ['#ff0000', '#fe0004', '#fd000b', '#fd000b', '#fc0012', '#fd0012', '#fc0017', '#fb001a', '#fb001b', '#fa001f', '#f9001f', '#f80023', '#f80023', '#f70026', '#f70028', '#f7002a', '#f6002d', '#f6002d', '#f50030', '#f40030', '#f30033', '#f30033', '#f20035', '#f20038', '#f10038', '#f0003b', '#f0003d', '#f0003d', '#ef0040', '#ef0040', '#ed0042', '#ec0045', '#ed0045', '#ec0047', '#ea004a', '#ea004a', '#ea004c', '#ea004c', '#e9004e', '#e70051', '#e70053', '#e70053', '#e60055', '#e60055', '#e40057', '#e40059', '#e40059', '#e3005b', '#e2005d', '#e1005d', '#e1005f', '#e00061', '#df0061', '#df0063', '#de0064', '#de0065', '#dd0067', '#dc0069', '#db006b', '#da006b', '#da006d', '#d9006e', '#d9006f', '#d80071', '#d70071', '#d60074', '#d50074', '#d40076', '#d40077', '#d30078', '#d2007a', '#d2007b', '#d1007c', '#d0007d', '#cf007f', '#cf0080', '#ce0081', '#cd0082', '#cc0084', '#cb0085', '#ca0087', '#ca0088', '#c90089', '#c9008a', '#c7008c', '#c7008c', '#c6008d', '#c5008f', '#c50090', '#c40090', '#c30092', '#c20094', '#c10095', '#c00096', '#c00097', '#bf0099', '#be0099', '#bd009c', '#bb009d', '#bb009e', '#bb009e', '#ba00a0', '#b800a1', '#b800a1', '#b700a2', '#b600a4', '#b500a6', '#b300a7', '#b300a8', '#b200a8', '#b100aa', '#b000ab', '#af00ac', '#af00ad', '#ae00ad', '#ad00b0', '#ab00b1', '#ab00b2', '#a900b3', '#a900b3', '#a800b4', '#a700b5', '#a500b7', '#a400b8', '#a400b9', '#a300ba', '#a100bc', '#a000be', '#a000be', '#9f00bf', '#9d00bf', '#9c00c1', '#9b00c2', '#9900c3', '#9800c4', '#9800c5', '#9600c6', '#9500c8', '#9400c8', '#9400c9', '#9200ca', '#9100cb', '#8f00cc', '#8e00cd', '#8e00ce', '#8c00cf', '#8a00d0', '#8a00d0', '#8900d2', '#8700d3', '#8600d4', '#8500d5', '#8200d6', '#8200d7', '#8000d8', '#7f00d9', '#7e00d9', '#7c00db', '#7a00dc', '#7800dd', '#7800dd', '#7500df', '#7500df', '#7200e1', '#7200e1', '#7000e2', '#6e00e3', '#6c00e5', '#6b00e5', '#6a00e6', '#6800e6', '#6600e7', '#6400e9', '#6300e9', '#6000ea', '#5f00eb', '#5c00ec', '#5a00ed', '#5800ee', '#5500ef', '#5400f0', '#5200f0', '#4f00f1', '#4e00f2', '#4c00f2', '#4800f4', '#4700f4', '#4300f5', '#3e00f7', '#3c00f7', '#3c00f7', '#3500f9', '#3100fa', '#2f00fa', '#2a00fb', '#2400fc', '#1e00fd', '#1500fe', '#1000fe', '#0000ff'];
-	
+
 	socket.on('grid', function(msg){
 		grid = msg;
 		heat.clear();
@@ -84,10 +84,12 @@ Client
 		for(var i = 0; i < grid.length; i++){
 			for(var j = 0; j < grid[0].length; j++){
 				if(gridded){
-					if(i%2 == 0 && j%2 == 0){
+		      /* In order to give it a more gridded look i change the color of each two cell to each cell.*/
 						ctx.fillStyle = "#D3D3D3";
 						ctx.fillRect(i*4,j*4,4,4);
-					}
+            // Added to give a more Gridded look.
+  					ctx.fillStyle = "#FFF";
+						ctx.fillRect(i*4,j*4,3,3);
 				}
 				if(grid[i][j] == 1){
 					switch(colored){
@@ -134,11 +136,11 @@ Client
 		}
 		drawClientGrid("#0000FF");
 	});
-	
+
 	socket.on('tickSpeed', function(speed){
 		$('#tickspeed').html(speed);
 	});
-	
+
 	function drawClientGrid(color){
 		for(var i = 0; i < clientGrid.length; i++){
 			for(var j = 0; j < clientGrid[0].length; j++){
@@ -150,16 +152,16 @@ Client
 			}
 		}
 	}
-	
+
 	var isDragging = false;
 	function pushPos(event){
 		coords = getMousePos(canvas, event);
 		canvasX = coords.x;
 		canvasY = coords.y;
-		
+
 		convertedX = parseInt(canvasX/4);
 		convertedY = parseInt(canvasY/4);
-		
+
 		//alert(convertedX + ", " + convertedY);
 		var type;
 		switch (event.which) {
@@ -177,39 +179,39 @@ Client
 		clientGrid[convertedX][convertedY] = type;
 		drawClientGrid("#0000FF");
 	}
-	
+
 	$(canvas).mousedown(function(event) {
 		pushPos(event);
 		isDragging = true;
 	});
-	
+
 	$(canvas).mousemove(function(event) {
 		if(isDragging){
 			pushPos(event);
 		}
 	});
-	
+
 	$(canvas).mouseup(function(event) {
 		isDragging = false;
 	});
-	
+
 	$(document).keydown(function(e) {
 		if(e.keyCode == 38) {
 			socket.emit('clientGrid', clientGrid);
 			clientGrid = zero2D(200,200);
 			drawClientGrid("#000000");
 		}
-		
+
 		if(e.keyCode == 27) {
 			socket.emit('clear');
-			
+
 		}
-		
+
 		if(e.keyCode == 40) {
 			clientGrid = zero2D(200,200);
 			drawClientGrid("#000000");
 		}
-		
+
 		if(e.keyCode == 67){
 			if(colored == 0){
 				colored = 1;
@@ -221,27 +223,27 @@ Client
 				colored = 0;
 			}
 		}
-		
+
 		if(e.keyCode == 71){
 			gridded = !gridded;
 		}
 	});
-	
+
 	$('#clearsim').click(function(e){
 		socket.emit('clear');
 	});
-	
+
 	$('#cleardraw').click(function(e){
 		clientGrid = zero2D(200,200);
 		drawClientGrid("#000000");
 	});
-	
+
 	$('#push').click(function(e){
 		socket.emit('clientGrid', clientGrid);
 		clientGrid = zero2D(200,200);
 		drawClientGrid("#000000");
 	});
-	
+
 	$('#colormode').click(function(e){
 		if(colored == 0){
 			colored = 1;
@@ -253,7 +255,7 @@ Client
 			colored = 0;
 		}
 	});
-	
+
 	$('#tgrid').click(function(e){
 		gridded = !gridded;
 	});
