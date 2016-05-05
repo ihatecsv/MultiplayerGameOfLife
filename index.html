@@ -29,6 +29,7 @@ Client
 	<script src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
 	<script src="simpleheat.js"></script>
 	<script>
+  var gridSize = [200,200];
 	var socket = io();
 	var canvas = document.getElementById("myCanvas");
 	var ctx = canvas.getContext("2d");
@@ -48,7 +49,7 @@ Client
 		return array;
 	}
 
-	var clientGrid = zero2D(200,200);
+	var clientGrid = zero2D(gridSize[0],gridSize[1]);
 
 	function getMousePos(canvas, evt) { //Thanks http://stackoverflow.com/users/1693593/k3n
 		var rect = canvas.getBoundingClientRect();
@@ -59,10 +60,10 @@ Client
 	}
 
 	function countNeighbours(x, y, type, grid){
-		count = 0;
+		var count = 0;
 		for(var i = -5; i <= 5; i++){
 			for(var j = -5; j <= 5; j++){
-				if(x+i >= 0 && x+i < 200 && y+j >= 0 && y+j < 200){
+				if(x+i >= 0 && x+i < gridSize[0] && y+j >= 0 && y+j < gridSize[1]){
 					if(!(i == 0 && j == 0)){
 						if(grid[x+i][y+j] == type){
 							count++;
@@ -198,7 +199,7 @@ Client
 	$(document).keydown(function(e) {
 		if(e.keyCode == 38) {
 			socket.emit('clientGrid', clientGrid);
-			clientGrid = zero2D(200,200);
+			clientGrid = zero2D(gridSize[0],gridSize[1]);
 			drawClientGrid("#000000");
 		}
 
@@ -208,7 +209,7 @@ Client
 		}
 
 		if(e.keyCode == 40) {
-			clientGrid = zero2D(200,200);
+			clientGrid = zero2D(gridSize[0],gridSize[1]);
 			drawClientGrid("#000000");
 		}
 
@@ -234,13 +235,13 @@ Client
 	});
 
 	$('#cleardraw').click(function(e){
-		clientGrid = zero2D(200,200);
+		clientGrid = zero2D(gridSize[0],gridSize[1]);
 		drawClientGrid("#000000");
 	});
 
 	$('#push').click(function(e){
 		socket.emit('clientGrid', clientGrid);
-		clientGrid = zero2D(200,200);
+		clientGrid = zero2D(gridSize[0],gridSize[1]);
 		drawClientGrid("#000000");
 	});
 
