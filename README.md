@@ -10,3 +10,6 @@ A clone of Conway's Game of Life in NodeJS and HTML5
 
 ### Screenshot
 ![Screenshot](http://i.imgur.com/YI4uOEy.png)
+
+## Credit
+Uses [mourner/simpleheat](https://github.com/mourner/simpleheat) for heatmapping. :)
